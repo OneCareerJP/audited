@@ -51,6 +51,10 @@ module Audited
           end
         end
 
+        unless columns.include?('sql')
+          yield :add_sql_to_audits
+        end
+
         if columns.include?('association_id')
           yield :rename_association_to_associated
         end
