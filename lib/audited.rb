@@ -26,24 +26,15 @@ end
 
 require 'audited/auditor'
 require 'audited/audit'
+require 'audited/query'
 
 ::ActiveRecord::Base.send :include, Audited::Auditor
 
-module Query
-  def exec_query(sql, name = "SQL", binds = [], prepare: false)
-    old_connected_sql = ::Audited.store[:sql]
-    if old_connected_sql.nil? then
-      ::Audited.store[:sql] = sql
-    else
-      ::Audited.store[:sql] = old_connected_sql + " / " + sql
-    end
-    super(sql, name, binds, prepare: prepare)
+ActiveSupport.on_load(:after_initialize) do
+  adapters = ActiveRecord::ConnectionAdapters.constants.select{|klass| klass.name.include?("Adapter")}
+  for klass in adapters do
+    ::ActiveRecord::ConnectionAdapters.const_get(klass).send :prepend, Query
   end
-end
-
-adapters = ActiveRecord::ConnectionAdapters.constants.select{|_class| _class.name.include?("Adapter")}
-for _class in adapters do
-  ::ActiveRecord::ConnectionAdapters.const_get(_class).send :prepend, Query
 end
 
 require 'audited/sweeper'
