@@ -3,8 +3,7 @@ module Audited
     STORED_DATA = {
       current_remote_address: :remote_ip,
       current_request_uuid: :request_uuid,
-      current_user: :current_user,
-      sql: :sql,
+      current_user: :current_user
     }
 
     delegate :store, to: ::Audited
