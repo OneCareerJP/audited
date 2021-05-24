@@ -26,7 +26,15 @@ end
 
 require 'audited/auditor'
 require 'audited/audit'
+require 'audited/query'
 
 ::ActiveRecord::Base.send :include, Audited::Auditor
+
+ActiveSupport.on_load(:after_initialize) do
+  adapters = ActiveRecord::ConnectionAdapters.constants.select{|klass| klass.to_s.include?("Adapter")}
+  for klass in adapters do
+    ::ActiveRecord::ConnectionAdapters.const_get(klass).send :prepend, Query
+  end
+end
 
 require 'audited/sweeper'

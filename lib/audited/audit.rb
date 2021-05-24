@@ -11,6 +11,7 @@ module Audited
   # * <tt>version</tt>: the version of the model
   # * <tt>request_uuid</tt>: a uuid based that allows audits from the same controller request
   # * <tt>created_at</tt>: Time that the change was performed
+  # * <tt>sql</tt>: executed SQL
   #
 
   class YAMLIfTextColumnType
@@ -42,7 +43,7 @@ module Audited
     belongs_to :user,       polymorphic: true
     belongs_to :associated, polymorphic: true
 
-    before_create :set_version_number, :set_audit_user, :set_request_uuid, :set_remote_address
+    before_create :set_version_number, :set_audit_user, :set_request_uuid, :set_remote_address, :set_sql
 
     cattr_accessor :audited_class_names
     self.audited_class_names = Set.new
@@ -194,6 +195,10 @@ module Audited
 
     def set_remote_address
       self.remote_address ||= ::Audited.store[:current_remote_address]
+    end
+
+    def set_sql
+      self.sql ||= ::Audited.store[:sql]
     end
   end
 end
