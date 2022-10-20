@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Audited
-  VERSION = "4.10.0"
+  VERSION = "5.0.2"
 end

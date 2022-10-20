@@ -1,6 +1,57 @@
 # Audited ChangeLog
 
-## Unreleased
+## 5.0.2 (2021-09-16)
+
+Added
+
+- Relax ActiveRecord version constraint to support Rails 7
+  [#597](https://github.com/collectiveidea/audited/pull/597)
+
+Improved
+
+- Improve loading - @mvastola
+  [#592](https://github.com/collectiveidea/audited/pull/592)
+- Update README - @danirod, clement1234
+  [#596](https://github.com/collectiveidea/audited/pull/596)
+  [#594](https://github.com/collectiveidea/audited/pull/594)
+
+
+## 5.0.1 (2021-06-11)
+
+Improved
+
+- Don't load associated model when auditing is disabled - @nut4k1
+  [#584](https://github.com/collectiveidea/audited/pull/584)
+
+## 5.0.0 (2021-06-10)
+
+Improved
+
+- Fixes an issue where array attributes were not deserialized properly - @cfeckardt, @yuki24
+  [#448](https://github.com/collectiveidea/audited/pull/448)
+  [#576](https://github.com/collectiveidea/audited/pull/576)
+- Improve error message on audit_comment and allow for i18n override - @james
+  [#523](https://github.com/collectiveidea/audited/pull/523/)
+- Don't require a comment if only non-audited fields are changed - @james
+  [#522](https://github.com/collectiveidea/audited/pull/522/)
+- Readme updates - @gourshete
+  [#525](https://github.com/collectiveidea/audited/pull/525)
+- Allow restoring previous enum behavior with flag - @travisofthenorth
+  [#526](https://github.com/collectiveidea/audited/pull/526)
+- Follow Rails Autoloading conventions - @duncanjbrown
+  [#532](https://github.com/collectiveidea/audited/pull/532)
+- Fix own_and_associated_audits for STI Models - @eric-hemasystems
+  [#533](https://github.com/collectiveidea/audited/pull/533)
+- Rails 6.1 Improvements - @okuramasafumi, @marcrohloff
+  [#563](https://github.com/collectiveidea/audited/pull/563)
+  [#544](https://github.com/collectiveidea/audited/pull/544)
+- Use Thread local variables instead of Fibers - @arathunku
+  [#568](https://github.com/collectiveidea/audited/pull/568)
+
+Changed
+
+- Drop support for Rails 4 - @travisofthenorth
+  [#527](https://github.com/collectiveidea/audited/pull/527)
 
 ## 4.10.0 (2021-01-07)
 
