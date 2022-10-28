@@ -18,6 +18,7 @@ class <%= migration_class_name %> < <%= migration_parent %>
       t.column :request_uuid, :string
       t.column :sql, :text
       t.column :created_at, :datetime
+      t.column :audit_application, :string
     end
 
     add_index :audits, [:auditable_type, :auditable_id, :version], :name => 'auditable_index'
