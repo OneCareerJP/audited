@@ -1,10 +1,10 @@
 module Query
   def exec_query(sql, name = "SQL", binds = [], prepare: false)
-    old_connected_sql = ::Audited.store[:sql].dup
+    old_connected_sql = ::Audited.store[:sql]
     if old_connected_sql
-      ::Audited.store[:sql] = old_connected_sql + ";" + sql.dup.force_encoding("UTF-8")
+      ::Audited.store[:sql] = old_connected_sql + ";" + sql
     else
-      ::Audited.store[:sql] = sql.dup.force_encoding("UTF-8")
+      ::Audited.store[:sql] = sql
     end
     super(sql, name, binds, prepare: prepare)
   end

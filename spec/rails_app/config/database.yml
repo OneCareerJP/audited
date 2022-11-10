@@ -9,8 +9,7 @@ sqlite3: &SQLITE
 postgresql: &POSTGRES
   adapter: postgresql
   username: postgres
-  password: postgres
-  host: localhost
+  password:
   database: audited_test
   min_messages: ERROR
 
@@ -18,7 +17,7 @@ mysql: &MYSQL
   adapter: mysql2
   host: localhost
   username: root
-  password: root
+  password:
   database: audited_test
   charset: utf8
 

@@ -1,15 +1,8 @@
-# frozen_string_literal: true
-
-require "active_record"
+require 'active_record'
 
 module Audited
   class << self
-    attr_accessor \
-      :auditing_enabled,
-      :current_user_method,
-      :ignored_attributes,
-      :max_audits,
-      :store_synthesized_enums
+    attr_accessor :ignored_attributes, :current_user_method, :max_audits, :auditing_enabled
     attr_writer :audit_class
 
     def audit_class
@@ -17,13 +10,7 @@ module Audited
     end
 
     def store
-      current_store_value = Thread.current.thread_variable_get(:audited_store)
-
-      if current_store_value.nil?
-        Thread.current.thread_variable_set(:audited_store, {})
-      else
-        current_store_value
-      end
+      Thread.current[:audited_store] ||= {}
     end
 
     def config
@@ -31,21 +18,17 @@ module Audited
     end
   end
 
-  @ignored_attributes = %w[lock_version created_at updated_at created_on updated_on]
+  @ignored_attributes = %w(lock_version created_at updated_at created_on updated_on)
 
   @current_user_method = :current_user
   @auditing_enabled = true
-  @store_synthesized_enums = false
 end
 
 require 'audited/auditor'
 require 'audited/audit'
 require 'audited/query'
 
-ActiveSupport.on_load :active_record do
-  require "audited/audit"
-  include Audited::Auditor
-end
+::ActiveRecord::Base.send :include, Audited::Auditor
 
 ActiveSupport.on_load(:after_initialize) do
   adapters = ActiveRecord::ConnectionAdapters.constants.select{|klass| klass.to_s.include?("Adapter")}
@@ -54,5 +37,4 @@ ActiveSupport.on_load(:after_initialize) do
   end
 end
 
-require "audited/sweeper"
-require "audited/railtie"
+require 'audited/sweeper'

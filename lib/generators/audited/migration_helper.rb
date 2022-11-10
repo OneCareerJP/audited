@@ -1,10 +1,8 @@
-# frozen_string_literal: true
-
 module Audited
   module Generators
     module MigrationHelper
       def migration_parent
-        "ActiveRecord::Migration[#{ActiveRecord::Migration.current_version}]"
+        Rails::VERSION::MAJOR == 4 ? 'ActiveRecord::Migration' : "ActiveRecord::Migration[#{ActiveRecord::Migration.current_version}]"
       end
     end
   end

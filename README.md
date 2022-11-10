@@ -1,29 +1,20 @@
-Audited
-[![Gem Version](https://img.shields.io/gem/v/audited.svg)](http://rubygems.org/gems/audited)
-![Build Status](https://github.com/collectiveidea/audited/actions/workflows/ci.yml/badge.svg)
-[![Code Climate](https://codeclimate.com/github/collectiveidea/audited.svg)](https://codeclimate.com/github/collectiveidea/audited)
-[![Security](https://hakiri.io/github/collectiveidea/audited/master.svg)](https://hakiri.io/github/collectiveidea/audited/master)
-[![Ruby Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://github.com/testdouble/standard)
+Audited [![Build Status](https://secure.travis-ci.org/collectiveidea/audited.svg)](http://travis-ci.org/collectiveidea/audited) [![Code Climate](https://codeclimate.com/github/collectiveidea/audited.svg)](https://codeclimate.com/github/collectiveidea/audited) [![Security](https://hakiri.io/github/collectiveidea/audited/master.svg)](https://hakiri.io/github/collectiveidea/audited/master)
 =======
 
 **Audited** (previously acts_as_audited) is an ORM extension that logs all changes to your models. Audited can also record who made those changes, save comments and associate models related to the changes.
 
+Audited currently (4.x) works with Rails 6.1, Rails 6.0, 5.2, 5.1, 5.0 and 4.2.
 
-Audited currently (5.x) works with Rails 7.0, 6.1, 6.0, 5.2, 5.1, and 5.0.
-
-For Rails 4, use gem version 4.x
 For Rails 3, use gem version 3.0 or see the [3.0-stable branch](https://github.com/collectiveidea/audited/tree/3.0-stable).
 
 ## Supported Rubies
 
-Audited supports and is [tested against](https://github.com/collectiveidea/audited/actions/workflows/ci.yml) the following Ruby versions:
+Audited supports and is [tested against](http://travis-ci.org/collectiveidea/audited) the following Ruby versions:
 
-* 2.3
-* 2.4
-* 2.5
-* 2.6
-* 2.7
-* 3.0
+* 2.3.7
+* 2.4.4
+* 2.5.1
+* 2.6.3
 
 Audited may work just fine with a Ruby version not listed above, but we can't guarantee that it will. If you'd like to maintain a Ruby that isn't listed, please let us know with a [pull request](https://github.com/collectiveidea/audited/pulls).
 
@@ -36,16 +27,7 @@ Audited is currently ActiveRecord-only. In a previous life, Audited worked with 
 Add the gem to your Gemfile:
 
 ```ruby
-gem "audited", "~> 5.0"
-```
-
-And if you're using ```require: false``` you must add initializers like this:
-
-```ruby
-#./config/initializers/audited.rb
-require "audited"
-
-Audited::Railtie.initializers.each(&:run)
+gem "audited", "~> 4.9"
 ```
 
 Then, from your Rails app directory, create the `audits` table:
@@ -171,7 +153,7 @@ end
 
 ### Limiting stored audits
 
-You can limit the number of audits stored for your model. To configure limiting for all audited models, put the following in an initializer file (`config/initializers/audited.rb`):
+You can limit the number of audits stored for your model. To configure limiting for all audited models, put the following in an initializer:
 
 ```ruby
 Audited.max_audits = 10 # keep only 10 latest audits
@@ -210,7 +192,7 @@ class PostsController < ApplicationController
 end
 ```
 
-To use a method other than `current_user`, put the following in an initializer file (`config/initializers/audited.rb`):
+To use a method other than `current_user`, put the following in an initializer:
 
 ```ruby
 Audited.current_user_method = :authenticated_user
@@ -404,16 +386,6 @@ Then set it in an initializer:
 Audited.config do |config|
   config.audit_class = CustomAudit
 end
-```
-
-### Enum Storage
-
-In 4.10, the default behavior for enums changed from storing the value synthesized by Rails to the value stored in the DB. You can restore the previous behavior by setting the store_synthesized_enums configuration value:
-
-```ruby
-# config/initializers/audited.rb
-
-Audited.store_synthesized_enums = true
 ```
 
 ## Support

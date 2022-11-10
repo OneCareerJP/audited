@@ -1,6 +1,6 @@
 require "spec_helper"
 
-SingleCov.covered!
+SingleCov.covered! uncovered: 2 # 2 conditional on_load conditions
 
 class AuditsController < ActionController::Base
   before_action :populate_user
@@ -13,7 +13,7 @@ class AuditsController < ActionController::Base
   end
 
   def update
-    current_user.update!(password: "foo")
+    current_user.update!(password: 'foo')
     head :ok
   end
 
@@ -22,8 +22,7 @@ class AuditsController < ActionController::Base
   attr_accessor :current_user
   attr_accessor :custom_user
 
-  def populate_user
-  end
+  def populate_user; end
 end
 
 describe AuditsController do
@@ -31,7 +30,6 @@ describe AuditsController do
   render_views
 
   before do
-    Audited::Railtie.initializers.each(&:run)
     Audited.current_user_method = :current_user
   end
 
@@ -42,7 +40,7 @@ describe AuditsController do
       controller.send(:current_user=, user)
       expect {
         post :create
-      }.to change(Audited::Audit, :count)
+      }.to change( Audited::Audit, :count )
 
       expect(controller.company.audits.last.user).to eq(user)
     end
@@ -52,7 +50,7 @@ describe AuditsController do
       Audited.current_user_method = :nope
       expect {
         post :create
-      }.to change(Audited::Audit, :count)
+      }.to change( Audited::Audit, :count )
       expect(controller.company.audits.last.user).to eq(nil)
     end
 
@@ -62,18 +60,18 @@ describe AuditsController do
 
       expect {
         post :create
-      }.to change(Audited::Audit, :count)
+      }.to change( Audited::Audit, :count )
 
       expect(controller.company.audits.last.user).to eq(user)
     end
 
     it "should record the remote address responsible for the change" do
-      request.env["REMOTE_ADDR"] = "1.2.3.4"
+      request.env['REMOTE_ADDR'] = "1.2.3.4"
       controller.send(:current_user=, user)
 
       post :create
 
-      expect(controller.company.audits.last.remote_address).to eq("1.2.3.4")
+      expect(controller.company.audits.last.remote_address).to eq('1.2.3.4')
     end
 
     it "should record a UUID for the web request responsible for the change" do
@@ -92,7 +90,7 @@ describe AuditsController do
 
       expect {
         post :create
-      }.to change(Audited::Audit, :count)
+      }.to change( Audited::Audit, :count )
 
       expect(controller.company.audits.last.user).to eq(user)
     end
@@ -103,31 +101,33 @@ describe AuditsController do
       controller.send(:current_user=, user)
 
       expect {
-        put :update, params: {id: 123}
-      }.to_not change(Audited::Audit, :count)
+        params = Rails::VERSION::MAJOR == 4 ? {id: 123} : {params: {id: 123}}
+        put :update, **params
+      }.to_not change( Audited::Audit, :count )
     end
   end
 end
 
 describe Audited::Sweeper do
+
   it "should be thread-safe" do
     instance = Audited::Sweeper.new
 
     t1 = Thread.new do
       sleep 0.5
-      instance.controller = "thread1 controller instance"
-      expect(instance.controller).to eq("thread1 controller instance")
+      instance.controller = 'thread1 controller instance'
+      expect(instance.controller).to eq('thread1 controller instance')
     end
 
     t2 = Thread.new do
-      instance.controller = "thread2 controller instance"
+      instance.controller = 'thread2 controller instance'
       sleep 1
-      expect(instance.controller).to eq("thread2 controller instance")
+      expect(instance.controller).to eq('thread2 controller instance')
     end
 
-    t1.join
-    t2.join
+    t1.join; t2.join
 
     expect(instance.controller).to be_nil
   end
+
 end
