@@ -6,7 +6,6 @@ module Audited
   class << self
     attr_accessor \
       :auditing_enabled,
-      :enable_sql_log,
       :current_user_method,
       :ignored_attributes,
       :max_audits,
@@ -36,7 +35,6 @@ module Audited
 
   @current_user_method = :current_user
   @auditing_enabled = true
-  @enable_sql_log = false
   @store_synthesized_enums = false
 end
 
