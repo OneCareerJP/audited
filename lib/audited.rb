@@ -35,6 +35,7 @@ module Audited
 
   @current_user_method = :current_user
   @auditing_enabled = true
+  @enable_sql_log = false
   @store_synthesized_enums = false
 end
 
