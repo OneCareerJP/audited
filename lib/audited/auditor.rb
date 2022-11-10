@@ -422,6 +422,10 @@ module Audited
         self.auditing_enabled = false
       end
 
+      def enable_sql_log
+        self.enable_sql_log = false
+      end
+
       def enable_auditing
         self.auditing_enabled = true
       end

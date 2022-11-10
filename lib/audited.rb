@@ -48,12 +48,10 @@ ActiveSupport.on_load :active_record do
 end
 
 ActiveSupport.on_load(:after_initialize) do
-  if Rails.application.class.name == "Mina::Application"
     adapters = ActiveRecord::ConnectionAdapters.constants.select{|klass| klass.to_s.include?("Adapter")}
     for klass in adapters do
       ::ActiveRecord::ConnectionAdapters.const_get(klass).send :prepend, Query
     end
-  end
 end
 
 require "audited/sweeper"
