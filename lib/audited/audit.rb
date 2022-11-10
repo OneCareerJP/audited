@@ -14,7 +14,7 @@ module Audited
   # * <tt>request_uuid</tt>: a uuid based that allows audits from the same controller request
   # * <tt>created_at</tt>: Time that the change was performed
   # * <tt>sql</tt>: executed SQL
-  # * <tt>audit_application</tt>: updated application name
+  #
 
   class YAMLIfTextColumnType
     class << self
@@ -45,7 +45,7 @@ module Audited
     belongs_to :user, polymorphic: true
     belongs_to :associated, polymorphic: true
 
-    before_create :set_version_number, :set_audit_user, :set_request_uuid, :set_remote_address, :set_sql, :set_audit_application
+    before_create :set_version_number, :set_audit_user, :set_request_uuid, :set_remote_address, :set_sql
 
     cattr_accessor :audited_class_names
     self.audited_class_names = Set.new
@@ -142,11 +142,6 @@ module Audited
       ::Audited.store[:audited_user] = last_audited_user
     end
 
-    # 変更のあったプログラムを特定するための情報をaudit_applicationカラムに保存することができる
-    def self.as_audit_application(audit_application)
-      ::Audited.store[:audit_application] = audit_application
-    end
-
     # @private
     def self.reconstruct_attributes(audits)
       audits.each_with_object({}) do |audit, all|
@@ -203,12 +198,6 @@ module Audited
 
     def set_sql
       self.sql ||= ::Audited.store[:sql]
-    end
-
-    # 更新が発生したアプリケーションの名前を設定する
-    # ex) admins, parters
-    def set_audit_application
-      self.audit_application ||= ::Audited.store[:audit_application]
     end
   end
 end
