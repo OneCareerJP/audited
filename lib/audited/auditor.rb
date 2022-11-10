@@ -82,13 +82,6 @@ module Audited
         has_many :audits, -> { order(version: :asc) }, as: :auditable, class_name: Audited.audit_class.name, inverse_of: :auditable
         Audited.audit_class.audited_class_names << to_s
 
-        if self.class.enable_sql_log
-          adapters = ActiveRecord::ConnectionAdapters.constants.select{|klass| klass.to_s.include?("Adapter")}
-          for klass in adapters do
-            ::ActiveRecord::ConnectionAdapters.const_get(klass).send :prepend, Query
-          end
-        end
-
         after_create :audit_create if audited_options[:on].include?(:create)
         before_update :audit_update if audited_options[:on].include?(:update)
         before_destroy :audit_destroy if audited_options[:on].include?(:destroy)

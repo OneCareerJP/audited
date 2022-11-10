@@ -49,12 +49,13 @@ ActiveSupport.on_load :active_record do
   include Audited::Auditor
 end
 
-# ActiveSupport.on_load(:after_initialize) do
-#   adapters = ActiveRecord::ConnectionAdapters.constants.select{|klass| klass.to_s.include?("Adapter")}
-#   for klass in adapters do
-#     ::ActiveRecord::ConnectionAdapters.const_get(klass).send :prepend, Query
-#   end
-# end
+ActiveSupport.on_load(:after_initialize) do
+  adapters = ActiveRecord::ConnectionAdapters.constants.select{|klass| klass.to_s.include?("Adapter")}
+  for klass in adapters do
+    binding.pry
+    ::ActiveRecord::ConnectionAdapters.const_get(klass).send :prepend, Query
+  end
+end
 
 require "audited/sweeper"
 require "audited/railtie"
