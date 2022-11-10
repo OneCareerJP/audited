@@ -6,6 +6,7 @@ module Audited
   class << self
     attr_accessor \
       :auditing_enabled,
+      :enable_sql_log,
       :current_user_method,
       :ignored_attributes,
       :max_audits,
