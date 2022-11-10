@@ -45,7 +45,6 @@ module Audited
     belongs_to :user, polymorphic: true
     belongs_to :associated, polymorphic: true
 
-    after_initialize :set_enable_sql_log
     before_create :set_version_number, :set_audit_user, :set_request_uuid, :set_remote_address, :set_sql, :set_audit_application
 
     cattr_accessor :audited_class_names
@@ -204,7 +203,7 @@ module Audited
 
     def set_enable_sql_log
       binding.pry
-      ::Audited.store[:enable_sql_log] = ::Audited.enable_sql_log
+      
     end
 
     def set_sql
