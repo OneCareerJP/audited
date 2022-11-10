@@ -49,10 +49,12 @@ ActiveSupport.on_load :active_record do
 end
 
 ActiveSupport.on_load(:after_initialize) do
-    adapters = ActiveRecord::ConnectionAdapters.constants.select{|klass| klass.to_s.include?("Adapter")}
+  adapters = ActiveRecord::ConnectionAdapters.constants.select{|klass| klass.to_s.include?("Adapter")}
+  if klass.enable_sql_log
     for klass in adapters do
       ::ActiveRecord::ConnectionAdapters.const_get(klass).send :prepend, Query
     end
+  end
 end
 
 require "audited/sweeper"
