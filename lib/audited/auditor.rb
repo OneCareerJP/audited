@@ -65,9 +65,9 @@ module Audited
         extend Audited::Auditor::AuditedClassMethods
         include Audited::Auditor::AuditedInstanceMethods
 
-        class_attribute :enable_sql_log, default: false
         class_attribute :audit_associated_with, instance_writer: false
         class_attribute :audited_options, instance_writer: false
+        attr_accessor :enable_sql_log, default: false
         attr_accessor :audit_version, :audit_comment
 
         self.audited_options = options

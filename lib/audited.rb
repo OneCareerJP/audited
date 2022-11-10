@@ -19,7 +19,6 @@ module Audited
     def store
       current_store_value = Thread.current.thread_variable_get(:audited_store)
 
-      binding.pry
       if current_store_value.nil?
         Thread.current.thread_variable_set(:audited_store, {})
       else

@@ -45,6 +45,7 @@ module Audited
     belongs_to :user, polymorphic: true
     belongs_to :associated, polymorphic: true
 
+    before_create :reset_sql_store, if: Proc.new { self.class.enable_sql_log }
     before_create :set_version_number, :set_audit_user, :set_request_uuid, :set_remote_address, :set_sql, :set_audit_application
 
     cattr_accessor :audited_class_names
@@ -201,9 +202,9 @@ module Audited
       self.remote_address ||= ::Audited.store[:current_remote_address]
     end
 
-    def set_enable_sql_log
+    def reset_sql_store
       binding.pry
-      
+      ::Audited.store[:sql] = nil
     end
 
     def set_sql
