@@ -386,6 +386,12 @@ User.auditing_enabled = false
 end
 ```
 
+To enable sql column write, default value is false.
+
+```ruby
+# Change the setting in the initializer for each application
+Audited.sql_log_enabled = true
+```
 ### Custom `Audit` model
 
 If you want to extend or modify the audit model, create a new class that
