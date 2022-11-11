@@ -45,7 +45,8 @@ module Audited
     belongs_to :user, polymorphic: true
     belongs_to :associated, polymorphic: true
 
-    before_create :set_version_number, :set_audit_user, :set_request_uuid, :set_remote_address, :set_sql, :set_audit_application
+    before_create :set_sql, if: Proc.new { ::Audited.sql_log_enabled }
+    before_create :set_version_number, :set_audit_user, :set_request_uuid, :set_remote_address, :set_audit_application
 
     cattr_accessor :audited_class_names
     self.audited_class_names = Set.new

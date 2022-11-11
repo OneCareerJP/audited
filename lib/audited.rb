@@ -6,6 +6,7 @@ module Audited
   class << self
     attr_accessor \
       :auditing_enabled,
+      :sql_log_enabled,
       :current_user_method,
       :ignored_attributes,
       :max_audits,
@@ -35,6 +36,7 @@ module Audited
 
   @current_user_method = :current_user
   @auditing_enabled = true
+  @sql_log_enabled = false
   @store_synthesized_enums = false
 end
 
@@ -48,9 +50,11 @@ ActiveSupport.on_load :active_record do
 end
 
 ActiveSupport.on_load(:after_initialize) do
-  adapters = ActiveRecord::ConnectionAdapters.constants.select{|klass| klass.to_s.include?("Adapter")}
-  for klass in adapters do
-    ::ActiveRecord::ConnectionAdapters.const_get(klass).send :prepend, Query
+  if ::Audited.sql_log_enabled
+    adapters = ActiveRecord::ConnectionAdapters.constants.select{|klass| klass.to_s.include?("Adapter")}
+    for klass in adapters do
+      ::ActiveRecord::ConnectionAdapters.const_get(klass).send :prepend, Query
+    end
   end
 end
 
