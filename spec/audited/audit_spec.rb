@@ -354,4 +354,18 @@ describe Audited::Audit do
       expect(Audited.store[:audited_user]).to be_nil
     end
   end
+
+  describe "as_audit_application" do
+    it "should set audit_application string" do
+      Audited::Audit.as_audit_application("test-app") do
+        company = Models::ActiveRecord::Company.create name: "The auditors"
+        company.name = "The Auditors, Inc"
+        company.save
+
+        company.audits.each do |audit|
+          expect(audit.audit_application).to eq("test-app")
+        end
+      end
+    end
+  end
 end
