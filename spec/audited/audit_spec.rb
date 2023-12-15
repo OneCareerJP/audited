@@ -1,6 +1,6 @@
 require "spec_helper"
 
-SingleCov.covered! uncovered: 2 # Rails version check
+SingleCov.covered! uncovered: 2 + 1 # Rails version check + set_sql
 
 class CustomAudit < Audited::Audit
   def custom_method
@@ -357,7 +357,8 @@ describe Audited::Audit do
 
   describe "as_audit_application" do
     it "should set audit_application string" do
-      Audited::Audit.as_audit_application("test-app") do
+      Audited::Audit.as_audit_application("test-app")
+      Audited::Audit.as_user(user) do
         company = Models::ActiveRecord::Company.create name: "The auditors"
         company.name = "The Auditors, Inc"
         company.save
