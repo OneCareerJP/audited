@@ -80,6 +80,8 @@ ActiveRecord::Schema.define do
     t.column :remote_address, :string
     t.column :request_uuid, :string
     t.column :created_at, :datetime
+    t.column :audit_application, :string
+    t.column :sql, :text
   end
 
   add_index :audits, [:auditable_id, :auditable_type], name: "auditable_index"

@@ -1,6 +1,6 @@
 require "spec_helper"
 
-SingleCov.covered! uncovered: 1 # Rails version check
+SingleCov.covered! uncovered: 2 + 1 # Rails version check + set_sql
 
 class CustomAudit < Audited::Audit
   def custom_method
@@ -37,7 +37,7 @@ describe Audited::Audit do
 
     context "when a custom audit class is configured" do
       it "should be used in place of #{described_class}" do
-        Audited.config { |config| config.audit_class = CustomAudit }
+        Audited.config { |config| config.audit_class = "CustomAudit" }
         TempModel1.audited
 
         record = TempModel1.create
@@ -352,6 +352,21 @@ describe Audited::Audit do
         end
       }.to raise_exception("expected")
       expect(Audited.store[:audited_user]).to be_nil
+    end
+  end
+
+  describe "as_audit_application" do
+    it "should set audit_application string" do
+      Audited::Audit.as_audit_application("test-app")
+      Audited::Audit.as_user(user) do
+        company = Models::ActiveRecord::Company.create name: "The auditors"
+        company.name = "The Auditors, Inc"
+        company.save
+
+        company.audits.each do |audit|
+          expect(audit.audit_application).to eq("test-app")
+        end
+      end
     end
   end
 end
